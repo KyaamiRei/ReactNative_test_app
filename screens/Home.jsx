@@ -39,6 +39,7 @@ export const Home = ({ navigation }) => {
               navigation.navigate('DetailPost', { id: item.id, title: item.title });
             }}>
             <Post
+              key={item.id}
               title={item.title}
               createdAt={item.createdAt}
               imageUrl={item.imageUrl}
