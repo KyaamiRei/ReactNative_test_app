@@ -40,9 +40,7 @@ export const Home = ({ navigation }) => {
             }}>
             <Post
               key={item.id}
-              title={item.title}
-              createdAt={item.createdAt}
-              imageUrl={item.imageUrl}
+              {...item}
             />
           </TouchableOpacity>
         )}
