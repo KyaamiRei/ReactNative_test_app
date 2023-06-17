@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Alert, Button } from 'react-native';
 
 import axios from 'axios';
 
-import 'react-native-get-random-values';
-import { v1 } from 'uuid';
+import { AppContext } from '../store/AppContext';
 
 import styled from 'styled-components/native';
 
@@ -28,19 +27,24 @@ const TextInputField = styled.TextInput`
 `;
 
 export const AddForm = ({ navigation }) => {
-  const [postTitle, setPostTitle] = useState('');
-  const [postText, setPostText] = useState('');
-  const [postImageUrl, setPostImageUrl] = useState('');
+  const { setNews } = useContext(AppContext); // функция для изменения состояние всех постов
 
+  const [postTitle, setPostTitle] = useState(''); // название новости
+  const [postText, setPostText] = useState(''); // текст новости
+  const [postImageUrl, setPostImageUrl] = useState(''); // ссылка на картинку новости
+
+  // добавление новой новости, загрузка ее на сервер и обновление состояния
   const addNews = async () => {
     try {
+      let newPost = {
+        title: postTitle,
+        createdAt: new Date().getTime(),
+        imageUrl: postImageUrl,
+        text: postText,
+      };
       if (postTitle !== '' && postText !== '' && postImageUrl !== '') {
-        await axios.post('https://6489ff4a5fa58521cab099c9.mockapi.io/news', {
-          title: postTitle,
-          createdAt: new Date().getTime(),
-          imageUrl: postImageUrl,
-          text: postText,
-        });
+        await axios.post('https://6489ff4a5fa58521cab099c9.mockapi.io/news', newPost);
+        setNews((prev) => [...prev, newPost]);
         setPostTitle('');
         setPostText('');
         setPostImageUrl('');

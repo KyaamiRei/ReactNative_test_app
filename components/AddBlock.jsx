@@ -4,13 +4,13 @@ import styled from 'styled-components/native';
 
 const AddNewsBlock = styled.View`
   z-index: 999;
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50px;
-  background-color: rgba(0, 0, 0, 0.7);
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const AddNewsButton = styled.Button``;

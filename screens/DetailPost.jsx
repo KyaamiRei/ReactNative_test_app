@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Alert, View } from 'react-native';
 import axios from 'axios';
 
 import styled from 'styled-components/native';
 
 import { Loading } from '../components/Loading';
+import { AppContext } from '../store/AppContext';
 
 const PostImage = styled.Image`
   border-radius: 10px;
@@ -19,34 +20,18 @@ const PostText = styled.Text`
 `;
 
 export const DetailPost = ({ route, navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState({});
+  const { news, isLoading, setIsLoading } = useContext(AppContext); // загрузка данных из общего хранилища
 
-  const { id, title } = route.params;
+  const [data, setData] = useState({}); // состояние для загруженного поста
 
-  const fetchPostById = () => { 
-    setIsLoading(true);
-    axios
-      .get(`https://6489ff4a5fa58521cab099c9.mockapi.io/news/${id}`)
-      .then(({ data }) => {
-        setData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert('Ошибка', 'He удалось получить статью');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  const { id, title } = route.params; // параметры взятые из пути
 
+  // при первой загрузке устанавливаем название страницы и подгружаем новость с сервера
   useEffect(() => {
-    navigation.setOptions(
-      {
-        title
-      }
-    )
-    fetchPostById();
+    navigation.setOptions({
+      title,
+    });
+    setData(news.find((item) => item.id === id));
   }, []);
 
   if (isLoading) {

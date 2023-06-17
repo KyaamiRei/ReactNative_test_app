@@ -1,7 +1,7 @@
-import { Alert, View, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import { useContext } from 'react';
 
-import axios from 'axios';
+import { AppContext } from '../store/AppContext';
 
 import { Post } from '../components/Post';
 import { Loading } from '../components/Loading';
@@ -16,28 +16,7 @@ const HomeScreen = styled.View`
 `;
 
 export const Home = ({ navigation }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [news, setNews] = useState([]);
-
-  const fetchPost = async () => {
-    setIsLoading(true);
-    await axios
-      .get('https://6489ff4a5fa58521cab099c9.mockapi.io/news')
-      .then(({ data }) => {
-        setNews(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert('Ошибка', 'Ошибка при получении статей');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  const { news, isLoading, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
 
   if (isLoading) {
     return <Loading />;
