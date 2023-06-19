@@ -18,10 +18,13 @@ const HomeScreen = styled.View`
 `;
 
 // TODO:
-// обновление форм ввода форм (добавление поля выбора категории новости)
 
 export const Home = ({ navigation }) => {
-  const { filteredNews, isLoading, isDialogShow, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
+  const { news, filteredNews, isLoading, isDialogShow, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
+
+  const onPressPost = (id, title) => {
+    navigation.navigate('DetailPost', { id: item.id, title: item.title });
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -44,18 +47,12 @@ export const Home = ({ navigation }) => {
           />
         }
         data={filteredNews}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              navigation.navigate('DetailPost', { id: item.id, title: item.title });
-            }}>
-            <Post
-              key={index}
-              {...item}
-            />
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => onPressPost(item.id, item.title)}>
+            <Post {...item} />
           </TouchableOpacity>
         )}
+        keyExtractor={(item) => item.id}
       />
       {/* Меню с кнопками */}
       <AddBlock navigation={navigation} />

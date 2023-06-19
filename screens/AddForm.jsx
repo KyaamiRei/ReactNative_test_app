@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Alert, Button } from 'react-native';
+import { Button } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 
-import axios from 'axios';
+import { AppContext } from '../store/AppContext';
+import { useSendPost } from '../hooks/useSendPost';
 
 import styled from 'styled-components/native';
-import { useSendPost } from '../hooks/useSendPost';
 
 const Form = styled.View`
   width: 100%;
@@ -19,28 +20,32 @@ const TextInputField = styled.TextInput`
   width: 100%;
   padding: 6px;
   margin-bottom: 10px;
+  padding-left: 20px;
   border-width: 2px;
   border-color: rgba(0, 0, 0, 0.2);
   border-style: solid;
+  border-radius: 20px;
   font-size: 16px;
 `;
 
 export const AddForm = ({ navigation }) => {
+  const { categories } = useContext(AppContext);
   const { addNews } = useSendPost(); // функция для изменения состояние всех постов
 
   const [postTitle, setPostTitle] = useState(''); // название новости
   const [postText, setPostText] = useState(''); // текст новости
   const [postImageUrl, setPostImageUrl] = useState(''); // ссылка на картинку новости
-  const [catId, setCatId] = useState(''); // ID категории новости
-
+  const [catId, setCatId] = useState(0); // ID категории новости
 
   // добавление новой новости, загрузка ее на сервер и обновление состояния
   const addNewNews = () => {
-    addNews(postTitle, postText, postImageUrl);
+    const categoryId = categories.indexOf(catId);
+
+    addNews(postTitle, postText, postImageUrl, categoryId);
     setPostTitle('');
     setPostText('');
     setPostImageUrl('');
-    setCatId('')
+    setCatId(0);
     navigation.navigate('Home');
   };
 
@@ -60,6 +65,25 @@ export const AddForm = ({ navigation }) => {
         placeholder='Ссылка на картинку'
         value={postImageUrl}
         onChangeText={setPostImageUrl}
+      />
+      <SelectList
+        data={categories}
+        setSelected={setCatId}
+        boxStyles={{
+          borderWidth: 2,
+          borderColor: 'rgba(0,0,0,0.2)',
+          marginBottom: 15,
+          borderRadius: 23,
+        }}
+        inputStyles={{ fontSize: 16, color: 'rgba(0,0,0,0.4)', width: '92%' }}
+        dropdownStyles={{
+          marginBottom: 15,
+          width: 330,
+          borderWidth: 2,
+          borderColor: 'rgba(0,0,0,0.2)',
+        }}
+        dropdownTextStyles={{ fontSize: 16, color: 'rgba(0,0,0,0.4)' }}
+        placeholder='Выберите категорию'
       />
       <Button
         title='Добавить новость'

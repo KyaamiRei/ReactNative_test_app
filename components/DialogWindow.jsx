@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Button, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 
-import styled from 'styled-components/native';
 import { AppContext } from '../store/AppContext';
 import { useSendPost } from '../hooks/useSendPost';
+
+import styled from 'styled-components/native';
 
 const Dialog = styled.TouchableOpacity`
   width: 100%;
@@ -18,7 +20,7 @@ const Dialog = styled.TouchableOpacity`
 
 const DialogBlock = styled.TouchableOpacity`
   width: 83%;
-  height: 230px;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,18 +41,23 @@ const TextInputField = styled.TextInput`
 `;
 
 export const DialogWindow = () => {
-  const { setIsDialogShow } = useContext(AppContext);
+  const { categories, setIsDialogShow } = useContext(AppContext);
   const { addNews } = useSendPost();
 
   const [postTitle, setPostTitle] = useState(''); // название новости
   const [postText, setPostText] = useState(''); // текст новости
   const [postImageUrl, setPostImageUrl] = useState(''); // ссылка на картинку новости
+  const [catId, setCatId] = useState(0); // ID категории новости
 
   const onAddNewNews = () => {
-    addNews(postTitle, postText, postImageUrl);
+    const categoryId = categories.indexOf(catId);
+
+    addNews(postTitle, postText, postImageUrl, categoryId);
     setPostTitle('');
     setPostText('');
     setPostImageUrl('');
+    setCatId(0);
+    setIsDialogShow(false);
   };
 
   const onClickDialog = (e) => {
@@ -77,6 +84,25 @@ export const DialogWindow = () => {
           placeholder='Ссылка на картинку'
           value={postImageUrl}
           onChangeText={setPostImageUrl}
+        />
+        <SelectList
+          data={categories}
+          setSelected={setCatId}
+          boxStyles={{
+            borderWidth: 2,
+            borderColor: 'rgba(0,0,0,0.2)',
+            marginBottom: 15,
+            borderRadius: 23,
+          }}
+          inputStyles={{ fontSize: 16, color: 'rgba(0,0,0,0.4)', width: '80%' }}
+          dropdownStyles={{
+            marginBottom: 15,
+            width: 245,
+            borderWidth: 2,
+            borderColor: 'rgba(0,0,0,0.2)',
+          }}
+          dropdownTextStyles={{ fontSize: 16, color: 'rgba(0,0,0,0.4)' }}
+          placeholder='Выберите категорию'
         />
         <Button
           title='Добавить новость'

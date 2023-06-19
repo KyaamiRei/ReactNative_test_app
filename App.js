@@ -38,16 +38,17 @@ export default function App() {
   // при первой загрузке подгружаем посты
   useEffect(() => {
     fetchPost();
+    setFilteredNews(news);
   }, []);
 
   // генерация списка новостей на основе фильтра
   useEffect(() => {
     if (activeCategory > 0) {
-      setFilteredNews(news.filter((item) => item.idCat === activeCategory));
+      setFilteredNews(news.filter((item) => item.catId === activeCategory));
     } else {
       setFilteredNews(news);
     }
-  }, [activeCategory]);
+  }, [activeCategory, news]);
 
   return (
     <AppContext.Provider

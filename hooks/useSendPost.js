@@ -9,13 +9,14 @@ export const useSendPost = () => {
   const { setNews } = useContext(AppContext);
 
   // добавление новой новости, загрузка ее на сервер и обновление состояния
-  const addNews = async (postTitle, postText, postImageUrl) => {
+  const addNews = async (postTitle, postText, postImageUrl, catId) => {
     try {
       let newPost = {
         title: postTitle,
         createdAt: new Date().getTime(),
         imageUrl: postImageUrl,
         text: postText,
+        catId: catId,
       };
       if (postTitle !== '' && postText !== '' && postImageUrl !== '') {
         await axios.post('https://6489ff4a5fa58521cab099c9.mockapi.io/news', newPost);
@@ -31,8 +32,6 @@ export const useSendPost = () => {
 
   return { addNews };
 };
-
-
 
 const addNewNews = () => {
   addNews(postTitle, postText, postImageUrl);
