@@ -10,6 +10,7 @@ import { Navigation } from './screens/Navigations';
 // общее хранилище данных
 
 export default function App() {
+  const [isDialogShow, setIsDialogShow] = useState(false); // состояние для показа диалогового окна
   const [isLoading, setIsLoading] = useState(false); // состояние загрузки
   const [news, setNews] = useState([]); // объект для хранения всех новостей
 
@@ -36,7 +37,8 @@ export default function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={{ news, setNews, isLoading, setIsLoading, fetchPost }}>
+    <AppContext.Provider
+      value={{ news, setNews, isLoading, setIsLoading, fetchPost, isDialogShow, setIsDialogShow }}>
       <Navigation />
     </AppContext.Provider>
   );

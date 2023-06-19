@@ -8,6 +8,7 @@ import { Loading } from '../components/Loading';
 import { AddBlock } from '../components/AddBlock';
 
 import styled from 'styled-components/native';
+import { DialogWindow } from '../components/DialogWindow';
 
 const HomeScreen = styled.View`
   height: 100%;
@@ -16,7 +17,7 @@ const HomeScreen = styled.View`
 `;
 
 export const Home = ({ navigation }) => {
-  const { news, isLoading, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
+  const { news, isLoading, isDialogShow, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
 
   if (isLoading) {
     return <Loading />;
@@ -24,6 +25,8 @@ export const Home = ({ navigation }) => {
 
   return (
     <HomeScreen>
+      {isDialogShow ? <DialogWindow /> : ''}
+
       <AddBlock navigation={navigation} />
       <FlatList
         refreshControl={
@@ -35,11 +38,12 @@ export const Home = ({ navigation }) => {
         data={news}
         renderItem={({ item }) => (
           <TouchableOpacity
+            key={item.title}
             onPress={() => {
               navigation.navigate('DetailPost', { id: item.id, title: item.title });
             }}>
             <Post
-              key={item.id}
+              key={item.title}
               {...item}
             />
           </TouchableOpacity>
