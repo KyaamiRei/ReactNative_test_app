@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 
-import styled from 'styled-components/native';
 import { AppContext } from '../store/AppContext';
+
+import styled from 'styled-components/native';
 
 const AddNewsBlock = styled.View`
   z-index: 999;

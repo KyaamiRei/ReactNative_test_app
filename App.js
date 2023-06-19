@@ -10,9 +10,13 @@ import { Navigation } from './screens/Navigations';
 // общее хранилище данных
 
 export default function App() {
+  const [news, setNews] = useState([]); // объект для хранения всех новостей
+  const [filteredNews, setFilteredNews] = useState([]); // объект для хранения отфильтрованых новостей
+  const [activeCategory, setActiveCategory] = useState(0); // состояние для активной категории
   const [isDialogShow, setIsDialogShow] = useState(false); // состояние для показа диалогового окна
   const [isLoading, setIsLoading] = useState(false); // состояние загрузки
-  const [news, setNews] = useState([]); // объект для хранения всех новостей
+
+  const categories = ['Все', 'Городские', 'Другие'];
 
   // зарузка всех постов с сервера
   const fetchPost = async () => {
@@ -36,9 +40,30 @@ export default function App() {
     fetchPost();
   }, []);
 
+  // генерация списка новостей на основе фильтра
+  useEffect(() => {
+    if (activeCategory > 0) {
+      setFilteredNews(news.filter((item) => item.idCat === activeCategory));
+    } else {
+      setFilteredNews(news);
+    }
+  }, [activeCategory]);
+
   return (
     <AppContext.Provider
-      value={{ news, setNews, isLoading, setIsLoading, fetchPost, isDialogShow, setIsDialogShow }}>
+      value={{
+        news,
+        filteredNews,
+        categories,
+        setNews,
+        isLoading,
+        setIsLoading,
+        fetchPost,
+        isDialogShow,
+        setIsDialogShow,
+        activeCategory,
+        setActiveCategory,
+      }}>
       <Navigation />
     </AppContext.Provider>
   );

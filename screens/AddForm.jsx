@@ -31,6 +31,8 @@ export const AddForm = ({ navigation }) => {
   const [postTitle, setPostTitle] = useState(''); // название новости
   const [postText, setPostText] = useState(''); // текст новости
   const [postImageUrl, setPostImageUrl] = useState(''); // ссылка на картинку новости
+  const [catId, setCatId] = useState(''); // ID категории новости
+
 
   // добавление новой новости, загрузка ее на сервер и обновление состояния
   const addNewNews = () => {
@@ -38,6 +40,7 @@ export const AddForm = ({ navigation }) => {
     setPostTitle('');
     setPostText('');
     setPostImageUrl('');
+    setCatId('')
     navigation.navigate('Home');
   };
 
