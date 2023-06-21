@@ -17,13 +17,11 @@ const HomeScreen = styled.View`
   flex-direction: column;
 `;
 
-// TODO:
-
 export const Home = ({ navigation }) => {
-  const { news, filteredNews, isLoading, isDialogShow, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
+  const { filteredNews, isLoading, isDialogShow, fetchPost } = useContext(AppContext); // забираем из общего хранилища, нужные данные
 
   const onPressPost = (id, title) => {
-    navigation.navigate('DetailPost', { id: item.id, title: item.title });
+    navigation.navigate('DetailPost', { id: id, title: title });
   };
 
   if (isLoading) {
@@ -48,8 +46,13 @@ export const Home = ({ navigation }) => {
         }
         data={filteredNews}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onPressPost(item.id, item.title)}>
-            <Post {...item} />
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => onPressPost(item.id, item.title)}>
+            <Post
+              key={item.id}
+              {...item}
+            />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
